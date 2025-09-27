@@ -36,7 +36,23 @@ def generate_launch_description():
         ]
     )
 
+    lcm = Node(
+        package='nav2_lifecycle_manager',
+        executable='lifecycle_manager',
+        name='lifecycle_manager_detection',
+        output='screen',
+        parameters=[{
+            'use_sim_time': use_sim_time,
+            'autostart': True,
+            'bond_timeout': 0.0,
+            'node_names': [
+                '/blip2_ros/blip2_ros'
+            ]
+        }]
+    )
+
     ld = LaunchDescription()
     ld.add_action(sim_time_arg)
     ld.add_action(blip2_ros_node)
+    ld.add_action(lcm)
     return ld
