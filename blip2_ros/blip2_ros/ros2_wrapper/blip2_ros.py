@@ -39,11 +39,14 @@ class Blip2Node(VLMBaseLifecycleNode):
 
     def semantic_similarity(self, request, response):
         pil_image = ros2_image_to_pil(request.image, logger=self.get_logger())
+        self.get_logger().info("Received image for semantic similarity.")
         if pil_image is None:
             response.score = float('nan')
+            self.get_logger().warn("Received invalid image.")
             return response
         img = self.vis_processors["eval"](pil_image).unsqueeze(0).to(self.device)
         txt = self.text_processors["eval"](request.query)
         with torch.inference_mode():
             response.score = self.model({"image": img, "text_input": txt}, match_head="itc").item()
+            self.get_logger().info(f"Semantic similarity score: {response.score}")
         return response
