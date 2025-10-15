@@ -26,7 +26,6 @@ class VLMBaseLifecycleNode(LifecycleNode):
 
     def on_activate(self, state: State):
         try:
-            self.image_sub = self.create_subscription(Image, '/rgb', self.image_callback, 10)
             self.create_services()
             return TransitionCallbackReturn.SUCCESS
         except Exception as e:
@@ -41,12 +40,6 @@ class VLMBaseLifecycleNode(LifecycleNode):
 
     def on_shutdown(self, state: State):
         return TransitionCallbackReturn.SUCCESS
-
-    def image_callback(self, msg: Image):
-        try:
-            self.rgb_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
-        except Exception as e:
-            self.get_logger().error(f"Image callback failed: {e}")
 
     # Diese Methoden implementieren Kindklassen:
     def load_model(self):
