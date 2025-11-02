@@ -28,7 +28,10 @@ class Blip2Node(VLMBaseLifecycleNode):
 
     def load_model(self):
         self.model, self.vis_processors, self.text_processors = load_model_and_preprocess(
-            "blip_image_text_matching", "large", device=self.device, is_eval=True
+            "blip_image_text_matching", 
+            "large", 
+            device=self.device, 
+            is_eval=True
         )
         return self.model
 
